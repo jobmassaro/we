@@ -39,7 +39,7 @@ $giococompleto = Action::ControlloCompleto($dbc);
            <td> <input type="text" name="importo1" id="importo1" onkeypress="return handleEnter(this, event)"/></td>
         </tr>
         <tr><td>Numero Scontrino:</td>
-           <td> <input type="text" name="numero1" id="numero1" onkeypress="return handleEnter(this, event)"/></td>
+           <td> <input type="text" name="numero1" id="numero1" onkeypress="return handleEnter(this, event)" required/></td>
         </tr>
         <!--tr><td>Data emissione:</td>
            <td> <input type="text" name="data1" id="datepicker50" onkeypress="return handleEnter(this, event)"/></td>
@@ -79,10 +79,22 @@ $("#invio1").click(function() {
 			alert("ATTENZIONE ESERCIZIO MANCANTE")
 			frm1.esercizio1.focus();
 				return false; }
+				
+			if ($("#numero1").val() == '') {
+			alert("ATTENZIONE SCONTRINO MANCANTE")
+			frm1.numero1.focus();
+				return false; }
+				
 				if ($("#importo1").val() == '') {
 			alert("ATTENZIONE IMPORTO MANCANTE O TROPPO BASSO")
 			frm1.importo1.focus();
 				return false; }
+				
+				if ($("#importo1").val() < 5) {
+			alert("DEVI CARICARE ALMENO 5 EURO")
+			frm1.importo1.focus();
+				return false; }
+				
                        
                             $('#tableScontrini').hide();
 	    $('#tableScontrini').html("");

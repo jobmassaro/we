@@ -4,7 +4,7 @@ use Models\Action;
 session_start();
 
 include('../inc/mysql.inc.php');
-
+$giococompleto = Action::ControlloCompleto($dbc);
 
 ?>
 <div ng-controller="nuovaTesseraCtrl">
@@ -122,7 +122,7 @@ include('../inc/mysql.inc.php');
    <tr>
     <td><label for="privacy1">Consenso al trattamento dei dati personali ai fini pubblicitari
 </label></td><td>
-  <select ng-model="item.privacy1" convert-to-number name="privacy1" required ng-init="item.privacy1=0">
+  <select name="privacy1" ng-model="item.privacy1" convert-to-number name="privacy1" ng-init="item.privacy1=0" required>
     <option value="0" selected="selected">NO</option>
     <option value="1" >SI</option>
   </select>
@@ -257,7 +257,7 @@ include('../inc/mysql.inc.php');
 
    ?>
 
-
+ 
 <script>
 
 
@@ -265,8 +265,17 @@ $(document).ready(function() {
 
 $( "#datepicker" ).datepicker({
 changeMonth: true,
-changeYear: true
+changeYear: true,
+ dateFormat: 'dd/mm/yy',
+ minDate: '-100Y',
+ maxDate: '-18Y', 
+ yearRange: '-100',
+
 });
+
+
+
+
 $( "#datepicker30" ).datepicker({
 changeMonth: true,
 changeYear: true
@@ -448,6 +457,12 @@ alert("ATTENZIONE SESSO MANCANTE")
 frm.sesso.focus();
 return false;
 }
+if (frm.privacy1.value == "0")  {
+alert("ATTENZIONE DEVI ACCETTARE ANCHE LA PRIVACY 2 ")
+frm.sesso.focus();
+return false;
+}
+
 /*
 if (frm.privacy.value == "0")  
 {
