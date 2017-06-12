@@ -190,10 +190,12 @@ CREATE TABLE `igigli_scontrino` (
   `data_scontrino` datetime NOT NULL,
   `barcode` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   `nome_puntovendita` varchar(100) COLLATE utf8_unicode_ci NOT NULL,
+  `card` varchar(3) COLLATE utf8_unicode_ci DEFAULT 'NO',
+  `card_number` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `esercizio` (`idesercizio`),
   KEY `data_scontrino` (`data_scontrino`)
-) ENGINE=MyISAM AUTO_INCREMENT=10293 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=10316 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
 CREATE TABLE `igigli_tabs` (
