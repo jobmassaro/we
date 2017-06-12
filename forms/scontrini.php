@@ -2,8 +2,6 @@
 
 use Models\Action;
 
-session_start();
-
 include('../inc/mysql.inc.php');
 
 $giococompleto = Action::ControlloCompleto($dbc);
@@ -41,6 +39,15 @@ $giococompleto = Action::ControlloCompleto($dbc);
         <tr><td>Numero Scontrino:</td>
            <td> <input type="text" name="numero1" id="numero1" onkeypress="return handleEnter(this, event)" required/></td>
         </tr>
+        <tr>
+          <td>Gigli Card:</td>
+          <td><input type="checkbox" class="active" name="giglicard" id="giglicard" value="5"></td>
+        </tr>
+        <tr id="mostratext">
+          <td>Gigli Card Numero:</td>
+          <td><input type="text" class="active" name="giglicardnr" id="giglicardnr" onfocus="javascript:this.value=''"     onkeypress="return handleEnter(this, event)"></td>
+        </tr>
+
         <!--tr><td>Data emissione:</td>
            <td> <input type="text" name="data1" id="datepicker50" onkeypress="return handleEnter(this, event)"/></td>
         </tr>-->
@@ -69,8 +76,32 @@ $giococompleto = Action::ControlloCompleto($dbc);
 
 
   <script>
+
+        var check_active ='';
+        var giglicardnumber='';
+
+        $('#mostratext').hide();
+
+        $("#giglicard").click(function() 
+        {
+          check_active = $(this).is(':checked') ? 1 : 0;
+          var check_id = $(this).attr('value');
+         
+         if(check_active == 1)
+         {
+           $('#mostratext').show(); 
+         }
+            
+        else
+           $('#mostratext').hide();
+          
+        });
+
+
+
   
 $("#invio1").click(function() {
+
 			if ($("#barcode1").val() == '') {
 			alert("ATTENZIONE BARCODE MANCANTE")
 			frm1.barcode1.focus();
@@ -90,17 +121,29 @@ $("#invio1").click(function() {
 			frm1.importo1.focus();
 				return false; }
 				
-				if ($("#importo1").val() < 5) {
-			alert("DEVI CARICARE ALMENO 5 EURO")
-			frm1.importo1.focus();
-				return false; }
-				
-                       
-                            $('#tableScontrini').hide();
+			if ($("#importo1").val() < 5) 
+      {
+			  alert("DEVI CARICARE ALMENO 5 EURO")
+			  frm1.importo1.focus();
+				return false; 
+      }
+      
+      if(check_active == 1 && $('#giglicardnr').val() != '')
+      {
+        giglicardnumber = $('#giglicardnr').val();
+      }
+      else if(check_active == 1 && $('#giglicardnr').val() == '')
+      {
+        alert('NUMERO DELLA GIFTCARD NON INDICATA');
+        return false; 
+      }
+
+      $('#tableScontrini').hide();
+
 	    $('#tableScontrini').html("");
-		$.get('../request/tableScontrini.php',{'esercizio':$('#esercizio1').val(),'numero':$('#numero1').val(),'data':$('#datepicker50').val(),'barcode':$('#barcode1').val(),'importo':$('#importo1').val(),'voto':$('#voto1').val(),'application':'concorsi'},function(html){
-	 $('#tableScontrini').show();
-		   $('#tableScontrini').html(html);
+	  	$.get('../request/tableScontrini.php',{'esercizio':$('#esercizio1').val(),'numero':$('#numero1').val(),'data':$('#datepicker50').val(),'barcode':$('#barcode1').val(),'importo':$('#importo1').val(),'voto':$('#voto1').val(),'application':'concorsi','check':check_active,'card':giglicardnumber},function(html){
+	    $('#tableScontrini').show();
+		  $('#tableScontrini').html(html);
                    $('#frm1')[0].reset();
 		}); 
                             

@@ -1,5 +1,5 @@
 <?php 
-session_start();
+
 use Models\Action;
 
 
@@ -15,6 +15,15 @@ $numero = $_GET['numero'];
 $data = date("Y-m-d");
 $voto = $_GET['voto'];
 $today = date("Y-m-d");
+
+
+$check =$_GET['check'];
+$giglicardnumber =$_GET['card'];
+
+
+
+
+
 $giococompleto = Action::ControlloCompleto($dbc);
 
 
@@ -39,8 +48,6 @@ $switch = null;
     $id_user =$_SESSION['user_id'];
     $controllobarcode = Action::controllobarcode ($barcode,$dbc);
     $controlloscontrini = Action::controlloscontrini ($barcode,$dbc);
-
-    
     if ($controllobarcode) 
     { 
         if ($quesito) 
@@ -50,7 +57,14 @@ $switch = null;
         else
         {
 	        $crediti = Action::calcolaGiocate ($importo, $esercizio,$dbc);
+             // Controllo che sia valorizzato UNION check la CARD 
+            if($check==1 && ($giglicardnumber != null || count($giglicardnumber)>0 ))
+            {
+                //incremento di 1;
+                $crediti++;
             
+            }
+            var_dump('primo crediti =>'.$crediti);
         }
         if ($contascontrini) 
         {
@@ -82,11 +96,15 @@ $switch = null;
         $sql ="SELECT credito FROM ".DB_NAME.".".newcredito." WHERE cliente ='{$barcode}'";
         $credito_presente = $dbc->query($sql)->fetch_object()->credito;
 
+       
+       
+
+       
+
         $sql ="SELECT usato FROM ".DB_NAME.".".newcredito." WHERE cliente ='{$barcode}'";
         $usato_presente = $dbc->query($sql)->fetch_object()->usato;
         $crediti = $crediti + ($credito_presente - $usato_presente);
         
-       
         if($crediti <= 5)
         {
                 $sql ="SELECT insegna FROM ".DB_NAME.".".PV." WHERE id ='{$esercizio}'";
@@ -128,7 +146,7 @@ $switch = null;
                 $update ="SELECT cliente FROM ".DB_NAME.".".newcredito." WHERE cliente ='{$barcode}'";
                 $cliente = $dbc->query($update)->fetch_object()->cliente;
 
-                
+        
 
                 if($cliente == null)
                 {
@@ -139,9 +157,7 @@ $switch = null;
                 }else
                 {
                     //Controllo ultimo credito a disposizione del barcode per poter effettuare la somma
-                    $sql ="SELECT credito FROM ".DB_NAME.".".newcredito." WHERE cliente ='{$cliente}'";
-                    $accredito = $dbc->query($sql)->fetch_object()->credito;
-                    $crediti = $crediti+$accredito;
+              
                     $update = "UPDATE ".DB_NAME.".".newcredito." SET credito='{$crediti}' WHERE cliente='{$cliente}'";
                     mysqli_query($dbc,$update);
                     echo "<br>CARICATA " . $vcredito . " Giocata<br><br>";
