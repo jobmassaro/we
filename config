@@ -1,0 +1,24 @@
+[
+	{
+		"name": "worldevent",
+		"host": "ftp.worldevent.it",
+		"port": 21,
+		"type": "ftp",
+		"username": "2373664@aruba.it",
+		"password": "4ft6rF6d6",
+		"path": "/",
+		"autosave": true,
+		"confirm": true
+	},
+	{
+		"name": "worldevent-secure",
+		"host": "ftp.secure-worldevent.com",
+		"port": 21,
+		"type": "ftp",
+		"username": "2373664@aruba.it",
+		"password": "4ft6rF6d6",
+		"path": "/",
+		"autosave": true,
+		"confirm": true
+	}
+]
